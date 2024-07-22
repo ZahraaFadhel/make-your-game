@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lets Chat Homepage</title>
+    <link href="/static/css/style.css" rel="stylesheet" type="text/css">
+    <link rel="icon" type="image/png" href="/static/img/favicon.png">
+</head>
+<body>
+    <div id="topbar">
+        <img src="/static/img/LOGO.png" width="100px" height="auto" alt="logo"/>
+    </div>
+    <div id="flex">
+        <div id="navbar">
+            <!-- home -->
+            <a href="/home">
+                <div class="active">
+                    <img src="/static/img/home-icon.png" alt="home">
+                    Home
+                </div>
+            </a>
+            <!-- home -->
+            <a href="/view_categories">
+                <div class="nav-item">
+                    <img src="/static/img/categories.png" alt="category">
+                    Categories
+                </div>
+            </a>
+            <!-- create post -->
+            {{if .LoggedInUser}}
+            <a href="/create_post">
+                <div class="nav-item">
+                    <img src="/static/img/addpost.png" alt="home">
+                    Create Post
+                </div>
+            </a>
+            {{end}}
+            <!-- profile -->
+            {{if .LoggedInUser}}
+            <a href="/profile">
+                <div class="nav-item">
+                    <img src="/static/img/user.png" alt="home">
+                    Profile
+                </div>
+            </a>
+            {{end}}
+            <!-- logout -->
+            {{if .LoggedInUser}}
+            <a href="/logout">
+                <div class="nav-item">
+                    <img src="/static/img/leave.png" alt="home">
+                    Log out
+                </div>
+            </a>
+            {{else}}
+            <a href="/login">
+                <div class="nav-item">
+                    <img src="/static/img/switch.png" alt="home">
+                    Login
+                </div>
+            </a>
+            {{end}}
+        </div>
+        <div id="middle-posts">
+            <div class="greetings">
+                {{if .LoggedInUser}}
+                <h1>Welcome, {{.LoggedInUser}}!</h1>
+                <p>Lets get to work</p>
+                {{end}}
+            </div>
+            <div id="posts">
+                {{range .Posts}}
+                <div class="post-structure">
+                    <a href="view_post/{{.PostID}}">
+                    <div class="username">
+                        <h5>{{.Username}}</h5>
+                        <p>posted on ({{.PostDate}})</p>
+                    </div>
+                    <div class="post-category">
+                        {{range .Categories}}
+                        {{.}}
+                        {{end}}
+                    </div>
+                    <div class="post-text">
+                        {{.PostText}}
+                    </div>
+                </a>
+                <div class="post-options">
+    <!-- {{if $.LoggedInUser}} -->
+    <form method="POST" class="like-form">
+        <button type="submit" class="like-button" data-post-id="{{.PostID}}">
+            <div id="like-heart-{{.PostID}}" class="heartLike"></div>
+        </button>
+    </form>
+    <b>
+        Likes <span id="like-count-{{.PostID}}">{{.LikeCount}}</span>
+    </b>
+    <form method="POST" class="dislike-form">
+        <button type="submit" class="dislike-button" data-post-id="{{.PostID}}">
+            <div id="dislike-heart-{{.PostID}}" class="heartDislike"></div>
+        </button>
+    </form>
+    <b>
+        Dislikes <span id="dislike-count-{{.PostID}}">{{.DislikeCount}}</span>
+    </b>
+    <!-- {{end}} -->
+</div>
+
+                
+                </div>
+                {{end}}
+            </div>
+        </div>
+        <div id="news">
+            <img src="/static/img/climate.png" width="315px" height="auto" alt="climate">
+            <div id="popular-category-box">
+                <h4>Popular Categories</h4>
+                {{range .PopularCategory}}
+                <!-- category list item -->
+                <a href="/category/{{.CategoryID}}">
+                    <div class="category-box">
+                        <div class="flex">
+                            <img src="/static/img/category - pink.png" alt="category-icon">
+                            <h6>{{.CategoryName}}</h6>
+                        </div>
+                        <p>{{.PostCount}} posts under this category</p>
+                    </div>
+                </a>
+                {{end}}
+            </div>
+        </div>
+    </div>
+    <style>
+        body{
+            /* background-color: #fbfafb; */
+            background-image: url(/static/img/background.png);
+            background-size: cover; /* Optional: Cover the entire viewport */
+            background-repeat: no-repeat; /* Optional: Prevent repeating */
+            background-attachment: fixed; /* Make the background fixed */
+        }
+    </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+    const likeButtons = document.querySelectorAll('.like-button');
+    const dislikeButtons = document.querySelectorAll('.dislike-button');
+
+    likeButtons.forEach(button => {
+    button.addEventListener('click', async (e) => {
+    e.preventDefault(); // to stop page refresh
+
+    const postId = button.getAttribute('data-post-id');
+    const url = `/like/${postId}`;
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ postId })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+
+        // Update the like count in the DOM
+        const likeCountSpan = document.getElementById(`like-count-${postId}`);
+        const dislikeCountSpan = document.getElementById(`dislike-count-${postId}`);
+        likeCountSpan.textContent = result.likeCount;
+        dislikeCountSpan.textContent = result.dislikeCount;
+
+        const heartLike = button.querySelector('.heartLike');
+        const heartDislike = button.querySelector('.heartDisLike');
+
+        if(!heartLike.classList.contains('red')){
+            if(heartDislike.classList.contains('red')){
+                heartDislike.remove('red')
+            }
+            heartLike.classList.add('red')
+        } else {
+            heartDislike.classList.remove('red')
+        }
+      } else {
+        console.error("Form submission failed");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
+  });
+});
+
+dislikeButtons.forEach(button => {
+    button.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const postId = button.getAttribute('data-post-id');
+        const url = `/dislike/${postId}`;
+                    
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ postId })
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+
+                // Update the like count in the DOM
+                const dislikeCountSpan = document.getElementById(`dislike-count-${postId}`);
+                const likeCountSpan = document.getElementById(`like-count-${postId}`);
+                dislikeCountSpan.textContent = result.dislikeCount;
+                likeCountSpan.textContent = result.likeCount;
+
+                const heartLike = button.querySelector('.heartLike');
+                const heartDislike = button.querySelector('.heartDisLike');
+
+                if(!heartLike.classList.contains('red')){
+                    if(heartDislike.classList.contains('red')){
+                        heartDislike.remove('red')
+                    }
+                    heartLike.classList.add('red')
+                } else {
+                    heartDislike.classList.remove('red')
+                }
+            } else {
+                console.error("Form submission failed");
+            }
+        } catch (error) {
+            console.error("Error submitting form:", error);
+        }
+    });
+});
+});
+
+    </script>
+</body>
+</html>
