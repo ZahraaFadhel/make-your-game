@@ -90,3 +90,9 @@ h4, h1{
 .scared-ghost {
   background-color: blue;
 }
+
+.pac-man {
+  background-color: aqua;
+  width: 20px;
+  position: relative;
+}
