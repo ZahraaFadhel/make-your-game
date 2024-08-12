@@ -35,7 +35,13 @@ body {
   width: 30px;
   cursor: pointer;
 }
-
+#lives {
+  display: flex;
+  align-items: center;
+}
+.life {
+  margin-right: 5px; 
+}
 h4, h1{
   /* comic sans MS */
   font-family: "Press Start 2P"; 

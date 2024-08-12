@@ -8,6 +8,7 @@ let directionX = 0;
 let directionY = 0;
 let animationFrameId;
 let pacmanCurrentIndex = 490
+let lives =3
 
 let pacmanImg = document.createElement('img')
 pacmanImg.src = "/img/pacman.svg"
@@ -184,17 +185,37 @@ function checkGameOver(){
         }
       });
     } else {
-      // Ghost is not scared, game over
-      ghosts.forEach(ghost => clearInterval(ghost.timerId));
-      document.removeEventListener('keyup', movePacman);
+      lives --;
+      updateLivesDisplay();
 
-      alert('Game Over you lost');
-      restart();
+      if (lives <= 0) {
+        ghosts.forEach(ghost => clearInterval(ghost.timerId));
+        document.removeEventListener('keyup', movePacman);
+        alert('Game Over. You lost!');
+        restart();
+        return;
+      }
     }
   }
 }
 
+function updateLivesDisplay() {
+  
+  pacmanCurrentIndex = 490;
+   SetPacman()
+   setGhosts(squares)
+   unScareGhosts()
+   movePacman();
 
+  for (let i = 1; i <= 3; i++) {
+    const lifeDiv = document.getElementById(`life${i}`);
+    if (i <= lives) {
+      lifeDiv.style.display = 'block'; // Show the Pac-Man SVG image for the life
+    } else {
+      lifeDiv.style.display = 'none'; // Hide the Pac-Man SVG image for the lost life
+    }
+  }
+}
 function checkForWin(){
   if (score >= totalDots){
     ghosts.forEach(ghost => clearInterval(ghost.timerId))
@@ -203,6 +224,8 @@ function checkForWin(){
     setTimeout( function(){ alert('You have WON')}, 500)
   }
 }
+
+
 
 function restart() {
   score = 0;
