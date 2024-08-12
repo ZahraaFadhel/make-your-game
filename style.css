@@ -5,7 +5,7 @@
   --OurBlack: rgb(34, 40, 49);
   --OurDarkGrey: rgb(49, 54, 63);
   --OurTeal: rgb(118, 171, 174);
-  --OurWhite: rgb(238, 238, 238)
+  --OurWhite: rgb(238, 238, 238);
 }
 
 body {
@@ -27,7 +27,7 @@ body {
   gap: 30px;
 }
 
-#score-count{
+#score-count {
   /* margin-right: 100px; */
 }
 
@@ -36,7 +36,15 @@ body {
   cursor: pointer;
 }
 
-h4, h1{
+#lives {
+  display: flex;
+  align-items: center;
+}
+.life {
+  margin-right: 5px; 
+}
+
+h4, h1, #timer {
   /* comic sans MS */
   font-family: "Press Start 2P"; 
   letter-spacing: 3px;
@@ -66,6 +74,12 @@ h4, h1{
   border: 5px solid var(--OurWhite);
   border-radius: 50%;
   box-sizing: border-box;
+  position: relative; /* Ensure positioning context */
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
 }
 
 .wall {
@@ -73,22 +87,32 @@ h4, h1{
 }
 
 .power {
-  /* background-color: var(--OurTeal);
-  border-radius: 10px;
-  box-sizing: border-box; */
+  background-color: rgb(220, 166, 39);
+  border: 4px solid var(--OurWhite);
+  border-radius: 50%;
+  box-sizing: border-box;
+  position: relative; 
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); */
+  /* transform: scale(0.8); */
 }
 
 .power img, .ghost img, .pacman img {
   width: 20px;
-  box-sizing: border-box;
+  z-index: 5;
 }
 
-.ghost {
-  /* background-color: aquamarine; */
-}
 
 .scared-ghost {
   background-color: blue;
+  z-index: 5;
+}
+
+.red {
+  z-index: 5;
 }
 
 .pac-man {

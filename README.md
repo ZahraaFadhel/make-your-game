@@ -1,8 +1,9 @@
 TO DO :
 
-- FIX: if a ghost reaches power it becomes fixed ✓
+- FIX: ghosts on dots ✓
+- To move through power
 - requestAnimationFrame() ✓
-- rotate pacman when moving
+- rotate pacman when moving ✓
 - favicon
 - restart ✓
 - stop / continue

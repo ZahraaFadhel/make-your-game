@@ -1,5 +1,6 @@
-import { ghosts, unScareGhosts, moveGhosts, setGhosts } from './ghosts.js';
+import { ghosts, unScareGhosts, moveGhosts, setGhosts, GHOST_MOVE_INTERVAL } from './ghosts.js';
 import {squares, layout, width, scoreDisplay, moveInterval} from './setup.js';
+import {startTimer, startBtn, isRunning } from './timer.js';
 
 let totalDots = 0;
 let lastMoveTime = 0;
@@ -8,6 +9,7 @@ let directionX = 0;
 let directionY = 0;
 let animationFrameId;
 let pacmanCurrentIndex = 490
+let lives =3
 
 let pacmanImg = document.createElement('img')
 pacmanImg.src = "/img/pacman.svg"
@@ -15,9 +17,15 @@ pacmanImg.src = "/img/pacman.svg"
 const grid = document.getElementById('grid');
 const restartButton = document.querySelector('.restart');
 
+// MENU 
+startBtn.addEventListener('click', startTimer);
+
 createBoard()
 SetPacman()
-moveGhosts(squares, width, scoreDisplay, score, checkGameOver);
+
+if (isRunning){
+  moveGhosts(squares, width, scoreDisplay, score, checkGameOver);
+}
 
 document.addEventListener('keydown', (e) => {
   switch(e.key) {
@@ -30,16 +38,16 @@ document.addEventListener('keydown', (e) => {
           pacmanImg.style.transform = "scaleX(1)"
           break;
       case 'ArrowUp':
-          directionY = -1;
+          directionY = -width;
           pacmanImg.style.transform = "rotate(-90deg)"
           break;
       case 'ArrowDown':
-          directionY = 1;
+          directionY = width;
           pacmanImg.style.transform = "rotate(90deg)"
           break;
   }
   if (!animationFrameId) {
-      movePacman();
+    movePacman();
   }
 });
 
@@ -87,9 +95,9 @@ function createBoard(){
     } else if (layout[i] == 3) {
       squares[i].classList.add('power')
       totalDots += 10
-      let cherryImg = document.createElement('img')
-      cherryImg.src = "/img/cherry.svg"
-      squares[i].appendChild(cherryImg)
+      // let cherryImg = document.createElement('img')
+      // cherryImg.src = "/img/cherry.svg"
+      // squares[i].appendChild(cherryImg)
     } else if (layout[i] == 4) {
       squares[i].classList.add('empty')
     }
@@ -110,14 +118,9 @@ function movePacman(timestamp) {
   const timeSinceLastMove = timestamp - lastMoveTime;
 
   if (timeSinceLastMove >= moveInterval) {
-    // Calculate potential new position
-    let newIndexX = pacmanCurrentIndex % width + directionX;
-    let newIndexY = Math.floor(pacmanCurrentIndex / width) + directionY;
-    let newIndex = newIndexY * width + newIndexX;
+    let newIndex = pacmanCurrentIndex + directionY + directionX;
 
-    // Check if the new position is a wall
     if (!squares[newIndex].classList.contains('wall')) {
-        // Update Pacman's position
         squares[pacmanCurrentIndex].classList.remove('pacman');
         
         pacmanCurrentIndex = newIndex;
@@ -150,7 +153,7 @@ function eatDot(){
 
 function eatPower(){
   if (squares[pacmanCurrentIndex].classList.contains('power')){
-    squares[pacmanCurrentIndex].querySelector('.power img').remove();
+    // squares[pacmanCurrentIndex].querySelector('.power img').remove();
     squares[pacmanCurrentIndex].classList.remove('power')
     score+=10
     scoreDisplay.innerHTML = score
@@ -184,16 +187,37 @@ function checkGameOver(){
         }
       });
     } else {
-      // Ghost is not scared, game over
-      ghosts.forEach(ghost => clearInterval(ghost.timerId));
-      document.removeEventListener('keyup', movePacman);
+      lives --;
+      updateLivesDisplay();
 
-      alert('Game Over you lost');
-      restart();
+      if (lives <= 0) {
+        ghosts.forEach(ghost => clearInterval(ghost.timerId));
+        document.removeEventListener('keyup', movePacman);
+        alert('Game Over. You lost!');
+        restart();
+        return;
+      }
     }
   }
 }
 
+function updateLivesDisplay() {
+  
+  pacmanCurrentIndex = 490;
+   SetPacman()
+   setGhosts(squares)
+   unScareGhosts()
+   movePacman();
+
+  for (let i = 1; i <= 3; i++) {
+    const lifeDiv = document.getElementById(`life${i}`);
+    if (i <= lives) {
+      lifeDiv.style.display = 'block'; // Show the Pac-Man SVG image for the life
+    } else {
+      lifeDiv.style.display = 'none'; // Hide the Pac-Man SVG image for the lost life
+    }
+  }
+}
 
 function checkForWin(){
   if (score >= totalDots){

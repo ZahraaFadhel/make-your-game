@@ -1,4 +1,5 @@
 // ghosts.js
+export const GHOST_MOVE_INTERVAL = 1000; // Move ghosts every 200 milliseconds
 
 export class Ghost {
   constructor(className, startIndex, speed) {
@@ -29,8 +30,7 @@ function moveGhost(ghost, squares, width, scoreDisplay, score, checkGameOver) {
 
   ghost.timerId = setInterval(function() {
     if (!squares[ghost.currentIndex + direction].classList.contains('ghost') &&
-        !squares[ghost.currentIndex + direction].classList.contains('wall') &&
-        !squares[ghost.currentIndex + direction].classList.contains('power')) {
+        !squares[ghost.currentIndex + direction].classList.contains('wall')) {
 
       squares[ghost.currentIndex].classList.remove('ghost', ghost.className, 'scared-ghost');
       const ghostImage = squares[ghost.currentIndex].querySelector('img');
@@ -42,7 +42,7 @@ function moveGhost(ghost, squares, width, scoreDisplay, score, checkGameOver) {
       squares[ghost.currentIndex].classList.add('ghost', ghost.className);
       
       let ghostImg = document.createElement('img');
-      ghostImg.src = `/img/${ghost.className}.svg`;  // Assuming each ghost has a unique image
+      ghostImg.src = `/img/${ghost.className}.svg`;  
       squares[ghost.currentIndex].appendChild(ghostImg);
     } else {
       direction = directions[Math.floor(Math.random() * directions.length)];
