@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Raleway:200');
+
+:root {
+  --OurBlack: rgb(34, 40, 49);
+  --OurDarkGrey: rgb(49, 54, 63);
+  --OurTeal: rgb(118, 171, 174);
+  --OurWhite: rgb(238, 238, 238);
+}
+
+body {
+  background-color: var(--OurBlack);
+}
+
+#wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#top {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+
+#score-count {
+  /* margin-right: 100px; */
+}
+
+#top img {
+  width: 30px;
+  cursor: pointer;
+}
+
+#lives {
+  display: flex;
+  align-items: center;
+}
+.life {
+  margin-right: 5px; 
+}
+
+h4, h1, #timer {
+  /* comic sans MS */
+  font-family: "Press Start 2P"; 
+  letter-spacing: 3px;
+  color: var(--OurWhite);
+  padding: 0;
+}
+
+#grid {
+  background-color: var(--OurWhite);
+  width: 560px;
+  height: 560px;
+  display: flex;
+  flex-wrap: wrap;
+  border: solid 10px var(--OurWhite);
+}
+
+#grid div {
+  /* border: solid 1px var(--OurTeal); */
+  width: 20px;
+  height: 20px;
+  box-sizing: border-box; 
+  /* border-box makes the total size includes padding & border */
+}
+
+.dot {
+  background-color: var(--OurTeal);
+  border: 5px solid var(--OurWhite);
+  border-radius: 50%;
+  box-sizing: border-box;
+  position: relative; /* Ensure positioning context */
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.wall {
+  background-color: var(--OurDarkGrey);
+}
+
+.power {
+  background-color: rgb(220, 166, 39);
+  border: 4px solid var(--OurWhite);
+  border-radius: 50%;
+  box-sizing: border-box;
+  position: relative; 
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); */
+  /* transform: scale(0.8); */
+}
+
+.power img, .ghost img, .pacman img {
+  width: 20px;
+  z-index: 5;
+}
+
+
+.scared-ghost {
+  background-color: blue;
+  z-index: 5;
+}
+
+.red {
+  z-index: 5;
+}
+
+.pac-man {
+  background-color: aqua;
+  width: 20px;
+  position: relative;
+}
