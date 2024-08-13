@@ -1,41 +1,44 @@
+
 let timerDisplay = document.getElementById('timer');
 
 let startTime;
 let updatedTime;
 let difference;
-let interval;
+
 export let running = false;
 
-export const startBtn = document.querySelector('.continue');
-const startImg = startBtn.querySelector('img');
-
-startImg.src = "/img/continue.svg"; // Set initial image
+let timerId = null;
+let timerStart = 0; // When the timer started
+let currentTimerTime = 0; // Total elapsed time
 
 export function startTimer() {
-  if (!running) {
-    startTime = new Date().getTime(); // Return time in milliseconds
-    interval = setInterval(getShowTime, 1); // Calls getShowTime every 1 millisecond
-    running = true;
-    startImg.src = "/img/pause.svg";
-  } else {
-    clearInterval(interval);
-    running = false;
-    startImg.src = "/img/continue.svg"; 
-  }
+  const startTime = Date.now() - currentTimerTime;
+  timerStart = startTime;
+
+  timerId = setInterval(() => {
+    const timeElapsed = Date.now() - timerStart;
+    currentTimerTime = timeElapsed;
+
+    let seconds = Math.floor((timeElapsed / 1000) % 60);
+    let minutes = Math.floor((timeElapsed / (1000 * 60)) % 60);
+
+    let formattedSeconds = seconds < 10 ? '0' + seconds : seconds;
+    let formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+
+    timerDisplay.innerText = `${formattedMinutes}:${formattedSeconds}`;
+  }, 1000);
 }
 
-function stopTimer() {
-  clearInterval(interval);
-  running = false;
-  startImg.src = "/img/continue.svg"; 
+export function clearTimer() {
+  clearInterval(timerId);
+  timerId = null;
 }
 
-function resetTimer() {
-  clearInterval(interval);
-  timerDisplay.textContent = "00:00";
-  running = false;
-  startImg.src = "/img/continue.svg";
-}
+// function stopTimer() {
+//   clearInterval(timerId);
+//   running = false;
+//   startImg.src = "/img/continue.svg"; 
+// }
 
 function getShowTime() {
   updatedTime = new Date().getTime();
@@ -51,5 +54,5 @@ function getShowTime() {
 }
 
 export function isRunning() {
-  return running;
+  return !!timerId;
 }
