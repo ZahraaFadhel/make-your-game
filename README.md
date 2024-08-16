@@ -1,18 +1,34 @@
 TO DO :
 
+- FIX: -> when scared ghost walked through pacman, pacman disappers ✓
+- Ghosts move through power ; why they skip it?
+- 1 when restart ✓
+
+- LAYERS ✓
+- FIX: -> when pacman is eaten in his start position ✓
+- stop / continue ✓
+- change scared-ghost img ✓
+- restart ✓
+
+
+
+
+
+
+
+
+
+
+
+
+- move from right to left ✓
+- Total dots (check for win) ✓
 - FIX: ghosts on dots ✓
-- To move through power
 - requestAnimationFrame() ✓
 - rotate pacman when moving ✓
 - favicon ✓
-- restart ✓
-- stop / continue
-- change scared-ghost img
 - 3 lives before game over ✓
 - Timer ✓
-- move from right to left
-- LAYERS
-- Total dots
 
 - random walls, dots, powers and ghosts
 - speed of pacman

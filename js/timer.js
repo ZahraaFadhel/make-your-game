@@ -5,8 +5,6 @@ let startTime;
 let updatedTime;
 let difference;
 
-export let running = false;
-
 let timerId = null;
 let timerStart = 0; // When the timer started
 let currentTimerTime = 0; // Total elapsed time
@@ -29,30 +27,26 @@ export function startTimer() {
   }, 1000);
 }
 
-export function clearTimer() {
+export function PauseTimer() {
   clearInterval(timerId);
   timerId = null;
 }
 
-// function stopTimer() {
-//   clearInterval(timerId);
-//   running = false;
-//   startImg.src = "/img/continue.svg"; 
-// }
-
-function getShowTime() {
-  updatedTime = new Date().getTime();
-  difference = updatedTime - startTime;
-
-  let minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-  let seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-  minutes = (minutes < 10) ? "0" + minutes : minutes;
-  seconds = (seconds < 10) ? "0" + seconds : seconds;
-
-  timerDisplay.textContent = minutes + ":" + seconds;
-}
-
 export function isRunning() {
   return !!timerId;
+}
+
+export function resetTimer() {
+  // Clear the current timer interval if it exists
+  if (timerId) {
+    clearInterval(timerId);
+    timerId = null;
+  }
+
+  // Reset the timer variables
+  currentTimerTime = 0;
+  timerStart = 0;
+
+  // Update the display to show 00:00
+  timerDisplay.innerText = '00:00';
 }

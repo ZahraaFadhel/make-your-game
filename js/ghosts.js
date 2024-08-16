@@ -1,6 +1,5 @@
 import { isRunning } from "./timer.js";
-// ghosts.js
-export const GHOST_MOVE_INTERVAL = 1000; // Move ghosts every 200 milliseconds
+export const GHOST_MOVE_INTERVAL = 1000;
 
 export class Ghost {
   constructor(className, startIndex, speed) {
@@ -14,51 +13,78 @@ export class Ghost {
 }
 
 export let ghosts = [
-  new Ghost('red', 348, 250),
-  new Ghost('pink', 376, 400),
-  new Ghost('blue', 351, 300),
-  new Ghost('orange', 379, 500)
+  new Ghost('red', 377, 250),
+  new Ghost('pink', 378, 400),
+  new Ghost('cyan', 405, 300),
+  new Ghost('orange', 406, 500)
 ];
 
 // Move ghosts randomly
 export function moveGhosts(squares, width, scoreDisplay, score, checkGameOver) {
-  if(isRunning()){ // && !gamePaused
+  if(isRunning()){
     ghosts.forEach(ghost => moveGhost(ghost, squares, width, scoreDisplay, score, checkGameOver));
   }
-}
-
-export function setGhosts(squares){
-  ghosts.forEach(ghost => {
-    squares[ghost.currentIndex].classList.add('ghost', ghost.className);
-      
-    // let ghostImg = document.createElement('img');
-    // ghostImg.src = `/img/${ghost.className}.svg`;  
-    // squares[ghost.currentIndex].appendChild(ghostImg);
-  })
 }
 
 function moveGhost(ghost, squares, width, scoreDisplay, score, checkGameOver) {
   const directions = [-1, 1, width, -width];
   let direction = directions[Math.floor(Math.random() * directions.length)];
-  let offSetX = 0, offSetY = 0;
+
+  // Clear any existing interval for the ghost
+  if (ghost.timerId) {
+    clearInterval(ghost.timerId);
+    ghost.timerId = null;
+  }
 
   ghost.timerId = setInterval(function() {
-    
-    if (!squares[ghost.currentIndex + direction].classList.contains('ghost') &&
+    // First, check if the ghost and Pac-Man are in the same square
+    if (ghost.isScared && squares[ghost.currentIndex].querySelector(".pacman") != null) {
+      // Pac-Man eats the scared ghost
+      score += 100;
+      scoreDisplay.innerHTML = score;
+
+      // Remove ghost from the square and reset its position
+      const ghostImage = squares[ghost.currentIndex].querySelector('.ghost-img');
+      if (ghostImage) {
+        squares[ghost.currentIndex].removeChild(ghostImage);
+      }
+      squares[ghost.currentIndex].classList.remove('ghost', ghost.className, 'scared-ghost');
+
+      // Reset ghost to its starting position
+      ghost.currentIndex = ghost.startIndex;
+      squares[ghost.currentIndex].classList.add('ghost', ghost.className);
+
+      // Add the ghost back to the grid with its initial image
+      const ghostDiv = document.createElement("div");
+      ghostDiv.classList.add("ghost-div");
+      let ghostImg = document.createElement('img');
+      ghostImg.classList.add("ghost-img");
+      ghostImg.src = `/img/${ghost.className}.svg`;
+      ghostDiv.appendChild(ghostImg);
+      squares[ghost.currentIndex].appendChild(ghostDiv);
+
+      return; // Skip the movement logic for this interval
+    }
+
+    // Now, proceed with ghost movement logic
+    if (squares[ghost.currentIndex + direction].querySelector(".ghost-img") == null &&
         !squares[ghost.currentIndex + direction].classList.contains('wall')) {
 
-      squares[ghost.currentIndex].style.transform = `translate(20px, 0px)`
-      // const ghostImage = squares[ghost.currentIndex].querySelector('img');
-      // if (ghostImage) {
-      //   squares[ghost.currentIndex].removeChild(ghostImage);
-      // }
+      squares[ghost.currentIndex].classList.remove('ghost', ghost.className, 'scared-ghost');
+      const ghostImage = squares[ghost.currentIndex].querySelector('.ghost-img');
+      if (ghostImage) {
+        squares[ghost.currentIndex].removeChild(ghostImage);
+      }
 
-      // ghost.currentIndex += direction;
-      // squares[ghost.currentIndex].classList.add('ghost', ghost.className);
+      ghost.currentIndex += direction;
+      squares[ghost.currentIndex].classList.add('ghost', ghost.className);
+      let ghostImg = document.createElement('img');
+      ghostImg.classList.add("ghost-img");
+      ghostImg.src = ghost.isScared ? `/img/scared-ghost.svg` : `/img/${ghost.className}.svg`;
+      ghostImg.style.width = "20px";
+      ghostImg.style.height = "20px";
       
-      // let ghostImg = document.createElement('img');
-      // ghostImg.src = `/img/${ghost.className}.svg`;  
-      // squares[ghost.currentIndex].appendChild(ghostImg);
+      squares[ghost.currentIndex].appendChild(ghostImg);
     } else {
       direction = directions[Math.floor(Math.random() * directions.length)];
     }
@@ -67,55 +93,49 @@ function moveGhost(ghost, squares, width, scoreDisplay, score, checkGameOver) {
       squares[ghost.currentIndex].classList.add('scared-ghost');
     }
 
-    // Pac-Man eats scared ghost
-    if (ghost.isScared && squares[ghost.currentIndex].classList.contains('pacman')) {
-      score += 100;
-      scoreDisplay.innerHTML = score;
-
-      // squares[ghost.currentIndex].classList.remove('ghost', ghost.className, 'scared-ghost');
-      // const ghostImage = squares[ghost.currentIndex].querySelector('img');
-      // if (ghostImage) {
-      //   squares[ghost.currentIndex].removeChild(ghostImage);
-      // }
-
-      ghost.currentIndex = ghost.startIndex;
-      // squares[ghost.currentIndex].classList.add('ghost', ghost.className);
-      // let ghostImg = document.createElement('img');
-      // ghostImg.src = `/img/${ghost.className}.svg`;
-      // squares[ghost.currentIndex].appendChild(ghostImg);
-    }
     checkGameOver();
   }, ghost.speed);
 }
 
-function updateGhostPosition(ghost, x, y) {
-  let ghostDiv = squares[ghost.currentIndex];
-  // if (!ghostImg) {
-  //   ghostImg = document.createElement('img');
-  //   ghostImg.src = `/img/${ghost.className}.svg`;
-  //   ghostImg.style.position = 'absolute';
-  //   squares[ghost.currentIndex].appendChild(ghostImg);
-  // }
-  ghostDiv.style.transform = `translate(${x}px, ${y}px)`;
+
+export function setGhosts(squares){
+
+  ghosts.forEach(ghost => {
+    if (ghost.className == 'red') {
+      ghost.currentIndex = 377;
+    } else if (ghost.className == 'pink') {
+      ghost.currentIndex = 378;
+    } else if (ghost.className == 'cyan') {
+      ghost.currentIndex = 405;
+    } else if (ghost.className == 'orange') {
+      ghost.currentIndex = 406;
+    }
+    
+    squares[ghost.currentIndex].classList.add('ghost');
+      
+    
+    let ghostImg = document.createElement('img');
+    ghostImg.classList.add("ghost-img");
+    ghostImg.src = ghost.isScared ? `/img/scared-ghost.svg` : `/img/${ghost.className}.svg`;
+    squares[ghost.currentIndex].appendChild(ghostImg);
+    
+  })
 }
 
 export function unScareGhosts() {
   ghosts.forEach(ghost => ghost.isScared = false);
 }
 
-// export function setGhosts(squares) {
-//   ghosts.forEach(ghost => {
-//     squares[ghost.currentIndex].classList.remove('ghost', ghost.className, 'scared-ghost');
-//     const ghostImage = squares[ghost.currentIndex].querySelector('img');
-//     if (ghostImage) {
-//       squares[ghost.currentIndex].removeChild(ghostImage);
-//     }
 
-//     // Reset ghost's position
-//     ghost.currentIndex = ghost.startIndex;
-//     squares[ghost.currentIndex].classList.add('ghost', ghost.className);
-//     let ghostImg = document.createElement('img');
-//     ghostImg.src = `/img/${ghost.className}.svg`;
-//     squares[ghost.currentIndex].appendChild(ghostImg);
-//   });
+// function getTransform(direction, width) {
+//   switch (direction) {
+//     case -1:
+//       return `translate(-20px, 0px)`;
+//     case 1:
+//       return `translate(20px, 0px)`; 
+//     case width:
+//       return `translate(0px, ${width}px)`;
+//     case -width:
+//       return `translate(0px, -${width}px)`;
+//   }
 // }

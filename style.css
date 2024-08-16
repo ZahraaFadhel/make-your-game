@@ -17,6 +17,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  overflow: hidden; /* Prevent content overflow */
 }
 
 #top {
@@ -25,10 +26,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 30px;
-}
-
-#score-count {
-  /* margin-right: 100px; */
+  will-change: transform, opacity; /* Trigger a new layer */
 }
 
 #top img {
@@ -40,9 +38,15 @@ body {
   display: flex;
   align-items: center;
 }
+
 .life {
-  margin-right: 5px; 
+  width: 30px;
+  height: 30px; 
+  background-color: red;
+  margin: 3px;
+  clip-path: path("M12 4.419c-2.826-5.695-11.999-4.064-11.999 3.27 0 7.27 9.903 10.938 11.999 15.311 2.096-4.373 12-8.041 12-15.311 0-7.327-9.17-8.972-12-3.27z");
 }
+
 
 h4, h1, #timer {
   /* comic sans MS */
@@ -50,6 +54,98 @@ h4, h1, #timer {
   letter-spacing: 3px;
   color: var(--OurWhite);
   padding: 0;
+}
+
+h1 {@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Press+Start+2P&display=swap');
+  @import url('https://fonts.googleapis.com/css?family=Raleway:200');
+  
+  :root {
+    --OurBlack: rgb(34, 40, 49);
+    --OurDarkGrey: rgb(49, 54, 63);
+    --OurTeal: rgb(118, 171, 174);
+    --OurWhite: rgb(238, 238, 238);
+  }
+  
+  body {
+    background-color: var(--OurBlack);
+  }
+  
+  #wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  #top {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    will-change: transform, opacity;
+  }
+  
+  #top img {
+    width: 30px;
+    cursor: pointer;
+  }
+
+  h4, h1, #timer {
+    font-family: "Press Start 2P"; 
+    letter-spacing: 3px;
+    color: var(--OurWhite);
+    padding: 0;
+  }
+  
+  #grid {
+    background-color: var(--OurWhite);
+    width: 560px;
+    height: 560px;
+    display: flex;
+    flex-wrap: wrap;
+    border: solid 10px var(--OurWhite);
+  }
+  
+  #grid div {
+    width: 20px;
+    height: 20px;
+    box-sizing: border-box;
+  }
+  
+  .dot {
+    background-color: var(--OurTeal);
+    border: 5px solid var(--OurWhite);
+    border-radius: 50%;
+    box-sizing: border-box;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .wall {
+    background-color: var(--OurDarkGrey);
+  }
+  
+  .power {
+    background-color: rgb(220, 166, 39);
+    box-sizing: border-box;
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    transform: scale(0.8);
+  }
+   
+  .ghost {
+    width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  transform: translateZ(0);
 }
 
 #grid {
@@ -62,7 +158,6 @@ h4, h1, #timer {
 }
 
 #grid div {
-  /* border: solid 1px var(--OurTeal); */
   width: 20px;
   height: 20px;
   box-sizing: border-box; 
@@ -74,12 +169,11 @@ h4, h1, #timer {
   border: 5px solid var(--OurWhite);
   border-radius: 50%;
   box-sizing: border-box;
-  position: relative; /* Ensure positioning context */
   width: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1;
+  /* z-index: 1; */
 }
 
 .wall {
@@ -91,30 +185,47 @@ h4, h1, #timer {
   /* border: 4px solid var(--OurWhite); */
   /* border-radius: 50%; */
   box-sizing: border-box;
-  position: relative; 
+  /* position: relative;  */
   width: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
   transform: scale(0.8);
+  z-index: 0;
 }
 
 .power img, .ghost img, .pacman img {
   width: 20px;
+  transform: translateZ(0);
+  /* clip-path: "none" */
+  z-index: 0;
 }
 
+.pacman{ 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateZ(0);
+  /* z-index: 2; */
+}
 
-.pac-man {
-  background-color: aqua;
+.ghost-img{
   width: 20px;
-  position: relative;
+  position: absolute;
+  z-index: 2;
 }
 
-.ghost {
-  background-color: black;
+.ghost-div{
+  z-index: 2;
 }
 
-.scared-ghost {
-  background-color: blue;
+.square {
+  position: relative; 
 }
+
+.power {
+  position: absolute;
+  z-index: 0; 
+}
+

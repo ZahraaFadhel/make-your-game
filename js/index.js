@@ -1,10 +1,10 @@
-import { ghosts, unScareGhosts, moveGhosts, setGhosts, GHOST_MOVE_INTERVAL } from './ghosts.js';
 import {squares, layout, width, scoreDisplay, moveInterval} from './setup.js';
-import {startTimer, isRunning, clearTimer } from './timer.js';
+import {startTimer, isRunning, PauseTimer, resetTimer } from './timer.js';
+import {setGhosts, ghosts, moveGhosts, unScareGhosts } from './ghosts.js';
 
 let totalDots = 0;
 let lastMoveTime = 0;
-let score = 0
+let score = 0;
 let directionX = 0;
 let directionY = 0;
 let animationFrameId;
@@ -12,13 +12,12 @@ let pacmanCurrentIndex = 490
 let lives =3
 let gamePaused = false;
 let currentTimerTime = 0;
+let eatenDots=0;
+let pacmanImg;
 
-let pacmanImg = document.createElement('img')
-pacmanImg.src = "/img/pacman.svg"
 
 const grid = document.getElementById('grid');
 const restartButton = document.querySelector('.restart');
-
 
 createBoard()
 SetPacman()
@@ -31,26 +30,30 @@ const startImg = startBtn.querySelector('img');
 startImg.src = "/img/continue.svg"; // Set initial image
 
 startBtn.addEventListener('click', () => {
-  if (gamePaused) {
-    // Resume the game
+  if (gamePaused) { // Resume the game
     gamePaused = false;
     startTimer(currentTimerTime); 
-    moveGhosts(squares, width, scoreDisplay, score, checkGameOver);
+
+   moveGhosts(squares, width, scoreDisplay, score, checkGameOver);
+    
     startImg.src = "/img/pause.svg";
-  } else if (isRunning()) {
+  } else if (isRunning()) { // Pause the game
     gamePaused = true;
-    clearTimer(); // Pause the timer
+    PauseTimer(); // Pause the timer
     ghosts.forEach(ghost => clearInterval(ghost.timerId)); // Pause ghost movement
     startImg.src = "/img/continue.svg";
   } else {
     // Start the game for the first time
     startTimer();
-    moveGhosts(squares, width, scoreDisplay, score, checkGameOver); // Start moving ghosts
+    moveGhosts(squares, width, scoreDisplay, score, checkGameOver);
+
     startImg.src = "/img/pause.svg";
   }
 });
 
 document.addEventListener('keydown', (e) => {
+  directionX=0, directionY=0;
+
   switch(e.key) {
       case 'ArrowLeft':
           directionX = -1;
@@ -69,12 +72,15 @@ document.addEventListener('keydown', (e) => {
           pacmanImg.style.transform = "rotate(90deg)"
           break;
   }
-  if (!animationFrameId) {
-    movePacman();
+  if((directionX !== 0 && directionY===0) || (directionX === 0 && directionY !==0)){
+    if (!animationFrameId) {
+      movePacman();
+    }
   }
 });
 
 document.addEventListener('keyup', (e) => {
+  
   switch(e.key) {
       case 'ArrowLeft':
       case 'ArrowRight':
@@ -100,7 +106,8 @@ restartButton.addEventListener('click', restart);
 function createBoard(){
   for (let i=0; i<layout.length; i++){
     let square = document.createElement('div')
-    square.id = i
+    square.classList.add("square")
+    square.id = `square-${i}`
     grid.appendChild(square)
 
     squares.push(square)
@@ -111,23 +118,33 @@ function createBoard(){
       squares[i].classList.add('wall')
     } else if (layout[i] == 2) {
       squares[i].classList.add('ghost')
+
       // let ghostImg = document.createElement('img')
-      // ghostImg.src = "/img/ghost2.svg"
+      // ghostImg.src = "/img/red.svg"
+      // ghostImg.classList.add('ghost-img');
       // squares[i].appendChild(ghostImg)
     } else if (layout[i] == 3) {
-      squares[i].classList.add('power')
-      // let cherryImg = document.createElement('img')
-      // cherryImg.src = "/img/cherry.svg"
-      // squares[i].appendChild(cherryImg)
+      const powerElement = document.createElement('div')
+      powerElement.classList.add('power')
+      squares[i].appendChild(powerElement)
+
+      // squares[i].classList.add('power')
     } else if (layout[i] == 4) {
       squares[i].classList.add('empty')
     }
   }
 }
 
-function SetPacman(){
-  squares[pacmanCurrentIndex].classList.add('pacman')
-  squares[pacmanCurrentIndex].appendChild(pacmanImg)
+
+function SetPacman(index=490){
+  const pacmanDiv = document.createElement('div');
+  pacmanDiv.classList.add("pacman")
+  pacmanImg = document.createElement('img')
+  pacmanImg.src = "/img/pacman.svg"
+  pacmanImg.style.transform = "scaleX(1)"
+  squares[index].appendChild(pacmanDiv)
+  pacmanDiv.append(pacmanImg)
+  pacmanCurrentIndex = index
 }
 
 
@@ -141,13 +158,27 @@ function movePacman(timestamp) {
   
     if (timeSinceLastMove >= moveInterval) {
       let newIndex = pacmanCurrentIndex + directionY + directionX;
-  
+      if (pacmanCurrentIndex % width === width - 1 && directionX === 1) {
+        newIndex = pacmanCurrentIndex - width + 1; // Move Pac-Man to the left side
+      }
+
+      if (pacmanCurrentIndex % width === 0 && directionX === -1) {
+        newIndex = pacmanCurrentIndex + width - 1; // Move Pac-Man to the right side
+      }
+      
       if (!squares[newIndex].classList.contains('wall')) {
-          squares[pacmanCurrentIndex].classList.remove('pacman');
-          
-          pacmanCurrentIndex = newIndex;
-          squares[pacmanCurrentIndex].classList.add('pacman');
-          squares[pacmanCurrentIndex].appendChild(pacmanImg)
+        let pacmanDiv = squares[pacmanCurrentIndex].querySelector(".pacman")
+
+        if(pacmanDiv){
+          squares[pacmanCurrentIndex].removeChild(pacmanDiv)
+        }
+        pacmanCurrentIndex = newIndex;
+        squares[pacmanCurrentIndex].appendChild(pacmanDiv)
+        
+        // squares[pacmanCurrentIndex].classList.remove('pacman');
+        // pacmanCurrentIndex = newIndex;
+        // squares[pacmanCurrentIndex].classList.add('pacman');
+        // squares[pacmanCurrentIndex].appendChild(pacmanImg)
       }
   
       // Update last move time
@@ -170,17 +201,21 @@ function eatDot(){
   if (squares[pacmanCurrentIndex].classList.contains('dot')){
     squares[pacmanCurrentIndex].classList.remove('dot')
     score++
+    eatenDots++
     scoreDisplay.innerHTML = score
   }
 }
 
 function eatPower(){
-  if (squares[pacmanCurrentIndex].classList.contains('power')){
-    // squares[pacmanCurrentIndex].querySelector('.power img').remove();
-    squares[pacmanCurrentIndex].classList.remove('power')
+  if (squares[pacmanCurrentIndex].firstChild.classList.contains('power')){
+    powerSound.play()
+    let powerDiv = squares[pacmanCurrentIndex].querySelector("div")
+    squares[pacmanCurrentIndex].removeChild(powerDiv)
     score+=10
     scoreDisplay.innerHTML = score
-    ghosts.forEach(ghost => ghost.isScared = true)
+    ghosts.forEach(ghost => 
+      ghost.isScared = true
+    )
     setTimeout(unScareGhosts, 10000)
   }
 }
@@ -191,31 +226,29 @@ function checkGameOver(){
     if (currentSquare.classList.contains('scared-ghost')) {
       // Pac-Man has eaten the scared ghost
       score += 100;
+      ghostSound.play();
+
       scoreDisplay.innerHTML = score;
 
       // Reset the ghost to its starting position
       ghosts.forEach(ghost => {
         if (ghost.currentIndex === pacmanCurrentIndex) {
           squares[ghost.currentIndex].classList.remove('ghost', ghost.className, 'scared-ghost');
-          const ghostImage = squares[ghost.currentIndex].querySelector('img');
+          const ghostImage = squares[ghost.currentIndex].querySelector('.ghost-img');
           if (ghostImage) {
             squares[ghost.currentIndex].removeChild(ghostImage);
           }
           ghost.currentIndex = ghost.startIndex;
-          squares[ghost.currentIndex].classList.add('ghost', ghost.className);
-          // let ghostImg = document.createElement('img');
-          // ghostImg.src = `/img/${ghost.className}.svg`;
-          // ghostImg.style.width = "20px"; // Ensure all ghost images are the same width
-          // squares[ghost.currentIndex].appendChild(ghostImg);
         }
       });
     } else {
-      lives --;
+      lives--;
       updateLivesDisplay();
-
+      gameOverSound.play();
       if (lives <= 0) {
         ghosts.forEach(ghost => clearInterval(ghost.timerId));
         document.removeEventListener('keyup', movePacman);
+        gameOverSound.play();
         alert('Game Over. You lost!');
         restart();
         return;
@@ -224,40 +257,73 @@ function checkGameOver(){
   }
 }
 
-function updateLivesDisplay() {
+
+
+// function updateLivesDisplay() {
   
-  pacmanCurrentIndex = 490;
-   SetPacman()
-   setGhosts(squares)
+//   pacmanCurrentIndex = 490;
+//    SetPacman()
+//    unScareGhosts()
+//    movePacman();
+
+//   for (let i = 1; i <= 3; i++) {
+//     const lifeDiv = document.getElementById(`life${i}`);
+//     if (i <= lives) {
+//       lifeDiv.style.display = 'block'; // Show the Pac-Man SVG image for the life
+//     } else {
+//       lifeDiv.style.display = 'none'; // Hide the Pac-Man SVG image for the lost life
+//     }
+//   }
+// }
+
+function updateLivesDisplay() { 
+  // delete the pacman in current 
+  const currentPacmanDiv = squares[pacmanCurrentIndex].querySelector(".pacman");
+  if (currentPacmanDiv) {
+    squares[pacmanCurrentIndex].removeChild(currentPacmanDiv);
+  }
+
+  const validIndices = layout
+    .map((value, index) => (value === 0 || value === 4 ? index : -1))
+    .filter(index => index !== -1);
+
+  let randomIndex = validIndices[Math.floor(Math.random() * validIndices.length)];
+ 
+   SetPacman(randomIndex)
+   pacmanCurrentIndex = randomIndex
    unScareGhosts()
    movePacman();
 
   for (let i = 1; i <= 3; i++) {
     const lifeDiv = document.getElementById(`life${i}`);
     if (i <= lives) {
-      lifeDiv.style.display = 'block'; // Show the Pac-Man SVG image for the life
+      lifeDiv.style.backgroundColor = 'red'; // heart image red
     } else {
-      lifeDiv.style.display = 'none'; // Hide the Pac-Man SVG image for the lost life
+      lifeDiv.style.backgroundColor = 'grey'; // heart image red
     }
   }
 }
 
 function checkForWin(){
-  if (score >= totalDots){
-    ghosts.forEach(ghost => clearInterval(ghost.timerId))
-    document.removeEventListener('keyup', movePacman)
-
-    setTimeout( function(){ alert('You have WON')}, 500)
+  if (score>= eatenDots && eatenDots==totalDots){
+    ghosts.forEach(ghost => clearInterval(ghost.timerId));
+    alert('You have WON');
+    setTimeout(restart, 100);
   }
 }
 
 function restart() {
+  lives = 3;
+  updateLivesDisplay();
   score = 0;
   scoreDisplay.textContent = score;
 
   directionX = 0;
   directionY = 0;
   lastMoveTime = 0;
+  eatenDots = 0;
+  totalDots = 0; 
+
   cancelAnimationFrame(animationFrameId);
   animationFrameId = null;
 
@@ -269,11 +335,15 @@ function restart() {
       }
   });
 
-  totalDots = 0; 
+  ghosts.forEach (ghost => clearInterval(ghost.timerId))
+  gamePaused = true;
+  resetTimer()
+  startImg.src = "/img/continue.svg";
+
   createBoard();
   pacmanCurrentIndex = 490;
   SetPacman()
-  setGhosts(squares)
   unScareGhosts()
-  movePacman();
+  setGhosts(squares)
 }
+

@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./style.css">
+  <link rel="icon" type="image/png" href="/img/pacman.svg">
+
   <title>Pac-Man</title>
 </head>
 
@@ -31,18 +33,17 @@
       </div>
 
       <div id="lives">
-        <div id="life1" class="life">
-          <img src="/img/pacman.svg" alt="Pac-Man">
-        </div>
-        <div id="life2" class="life">
-          <img src="/img/pacman.svg" alt="Pac-Man">
-        </div>
-        <div id="life3" class="life">
-          <img src="/img/pacman.svg" alt="Pac-Man">
-        </div>
+        <div id="life1" class="life"></div>
+        <div id="life2" class="life"></div>
+        <div id="life3" class="life"></div>
       </div>
+      
     </div>
-
+    <audio id="gameOverSound" src="/sounds/game_over_sound.mp3"></audio>
+    <audio id="moveSound" src="/sounds/move_sound.mp3"></audio>
+    <audio id="ghostSound" src="/sounds/ghost_sound.mp3"></audio>
+    <audio id="powerSound" src="/sounds/power_sound.mp3"></audio>
+    <audio id="startSound" src="/sounds/start_sound.mp3"></audio>
     <div id="grid">
     </div>
 
