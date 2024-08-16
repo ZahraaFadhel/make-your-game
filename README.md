@@ -1,9 +1,8 @@
 TO DO :
 
 - FIX: -> when scared ghost walked through pacman, pacman disappers ✓
-- Ghosts move through power ; why they skip it?
+- Ghosts move through power ; why they skip it? ✓
 - 1 when restart ✓
-
 - LAYERS ✓
 - FIX: -> when pacman is eaten in his start position ✓
 - stop / continue ✓
