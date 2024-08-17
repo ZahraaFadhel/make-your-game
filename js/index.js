@@ -196,7 +196,6 @@ function movePacman(timestamp) {
   }
 }
 
-
 function eatDot(){
   if (squares[pacmanCurrentIndex].classList.contains('dot')){
     squares[pacmanCurrentIndex].classList.remove('dot')
@@ -208,7 +207,7 @@ function eatDot(){
 
 function eatPower(){
   if (squares[pacmanCurrentIndex].firstChild.classList.contains('power')){
-    powerSound.play()
+    // powerSound.play()
     let powerDiv = squares[pacmanCurrentIndex].querySelector("div")
     squares[pacmanCurrentIndex].removeChild(powerDiv)
     score+=10
@@ -226,7 +225,7 @@ function checkGameOver(){
     if (currentSquare.classList.contains('scared-ghost')) {
       // Pac-Man has eaten the scared ghost
       score += 100;
-      ghostSound.play();
+      // ghostSound.play();
 
       scoreDisplay.innerHTML = score;
 
@@ -244,11 +243,11 @@ function checkGameOver(){
     } else {
       lives--;
       updateLivesDisplay();
-      gameOverSound.play();
+      // gameOverSound.play();
       if (lives <= 0) {
         ghosts.forEach(ghost => clearInterval(ghost.timerId));
         document.removeEventListener('keyup', movePacman);
-        gameOverSound.play();
+        // gameOverSound.play();
         alert('Game Over. You lost!');
         restart();
         return;
@@ -256,25 +255,6 @@ function checkGameOver(){
     }
   }
 }
-
-
-
-// function updateLivesDisplay() {
-  
-//   pacmanCurrentIndex = 490;
-//    SetPacman()
-//    unScareGhosts()
-//    movePacman();
-
-//   for (let i = 1; i <= 3; i++) {
-//     const lifeDiv = document.getElementById(`life${i}`);
-//     if (i <= lives) {
-//       lifeDiv.style.display = 'block'; // Show the Pac-Man SVG image for the life
-//     } else {
-//       lifeDiv.style.display = 'none'; // Hide the Pac-Man SVG image for the lost life
-//     }
-//   }
-// }
 
 function updateLivesDisplay() { 
   // delete the pacman in current 
