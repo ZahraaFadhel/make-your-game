@@ -150,6 +150,10 @@ function SetPacman(index=490){
 
 function movePacman(timestamp) {
   if (isRunning()){
+    checkForWin();
+    checkGameOver();
+    eatDot();
+    eatPower();
     if (!lastMoveTime) {
       lastMoveTime = timestamp;
     }
@@ -189,10 +193,7 @@ function movePacman(timestamp) {
     if (directionX !== 0 || directionY !== 0) {
         animationFrameId = requestAnimationFrame(movePacman);
     }
-    eatDot()
-    eatPower()
-    checkGameOver()
-    checkForWin()
+    
   }
 }
 
@@ -270,9 +271,10 @@ function updateLivesDisplay() {
   let randomIndex = validIndices[Math.floor(Math.random() * validIndices.length)];
  
    SetPacman(randomIndex)
+   eatDot();
    pacmanCurrentIndex = randomIndex
    unScareGhosts()
-   movePacman();
+  //  movePacman();
 
   for (let i = 1; i <= 3; i++) {
     const lifeDiv = document.getElementById(`life${i}`);
@@ -285,10 +287,10 @@ function updateLivesDisplay() {
 }
 
 function checkForWin(){
-  if (score>= eatenDots && eatenDots==totalDots){
+  if (eatenDots==totalDots){
     ghosts.forEach(ghost => clearInterval(ghost.timerId));
     alert('You have WON');
-    setTimeout(restart, 100);
+    restart();
   }
 }
 
@@ -306,7 +308,6 @@ function restart() {
 
   cancelAnimationFrame(animationFrameId);
   animationFrameId = null;
-
   // Clear the board and recreate it
   squares.forEach(square => {
       square.classList.remove('pacman', 'dot', 'wall', 'ghost', 'power', 'empty', 'scared-ghost');

@@ -220,9 +220,9 @@ h1 {@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&f
   z-index: 2;
 }
 
-.square {
+/* .square {
   position: relative; 
-}
+} */
 
 .power {
   position: absolute;
