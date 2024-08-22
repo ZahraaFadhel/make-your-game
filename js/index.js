@@ -1,6 +1,7 @@
 import {squares, layout, width, scoreDisplay, moveInterval} from './setup.js';
-import {startTimer, isRunning, PauseTimer, resetTimer } from './timer.js';
+import {startTimer, isRunning, PauseTimer, resetTimer,getCurrentTimerTime } from './timer.js';
 import {setGhosts, ghosts, moveGhosts, unScareGhosts } from './ghosts.js';
+import {showScoreboard} from './scoreboard.js';
 
 let totalDots = 0;
 let lastMoveTime = 0;
@@ -14,6 +15,7 @@ let gamePaused = false;
 let currentTimerTime = 0;
 let eatenDots=0;
 let pacmanImg;
+let playerData = {};
 
 
 const grid = document.getElementById('grid');
@@ -286,13 +288,26 @@ function updateLivesDisplay() {
   }
 }
 
-function checkForWin(){
-  if (eatenDots==totalDots){
-    ghosts.forEach(ghost => clearInterval(ghost.timerId));
-    alert('You have WON');
-    restart();
+function checkForWin() {
+  if (score >= 10 && eatenDots === 10) {
+      ghosts.forEach(ghost => clearInterval(ghost.timerId));
+      document.removeEventListener('keyup', movePacman);
+     // alert('You have WON');
+      const playerName = prompt("Enter your name:"); // Prompt the player for their name
+console.log(currentTimerTime)
+console.log( " lastMoveTime",lastMoveTime)
+
+      playerData = {
+          name: playerName,
+          score:score,
+          time: getCurrentTimerTime() 
+      };
+      localStorage.setItem('playerData', JSON.stringify(playerData)); // Store player data in localStorage
+      restart();
+      showScoreboard(1);
   }
 }
+
 
 function restart() {
   lives = 3;

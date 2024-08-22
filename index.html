@@ -4,40 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./scoreStyle.css">
   <link rel="icon" type="image/png" href="/img/pacman.svg">
-
   <title>Pac-Man</title>
 </head>
 
 <body>
   
   <div id="wrapper">
-
     <h1>Pac-Man</h1>
-
-
-    <div id="top">
-      
-      <div id="timer">
-        00:00
+    <div id="game-container">
+      <div id="top"> 
+        <div id="timer">00:00</div>  
+        <h4>Score:<span id="score">0</span></h4>
+        <div class="continue">
+          <img src="/img/continue.svg" alt="continue icon">
+        </div>
+        <div class="restart">
+          <img src="/img/restart.svg" alt="restart icon">
+        </div>
+        <div id="lives">
+          <div id="life1" class="life"></div>
+          <div id="life2" class="life"></div>
+          <div id="life3" class="life"></div>
+        </div>
+    </div>
+      <div id="game-over-screen">
+        <div id="board-score">
+            <h2>Scoreboard</h2>
+            <button id="close-scoreboard">x</button>
+            <div id="score-list"></div>
+            <div id="page-info"></div>     
+        </div>
       </div>
-      
-      <h4>Score:<span id="score">0</span></h4>
-
-      <div class="continue">
-        <img src="/img/continue.svg" alt="continue icon">
-      </div>
-
-      <div class="restart">
-        <img src="/img/restart.svg" alt="restart icon">
-      </div>
-
-      <div id="lives">
-        <div id="life1" class="life"></div>
-        <div id="life2" class="life"></div>
-        <div id="life3" class="life"></div>
-      </div>
-      
     </div>
     <audio id="gameOverSound" src="/sounds/game_over_sound.mp3"></audio>
     <audio id="moveSound" src="/sounds/move_sound.mp3"></audio>
