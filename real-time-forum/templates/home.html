@@ -1,0 +1,49 @@
+<div class="flex">
+    <div id="left-home-div" class="left-home-div">
+        <h1 id="welcome-message" class="HiMsgD">Hello.....</h1>
+        <div class="create-post-div">
+            <p class="home-welcoming">Welcome to the posts page! Here you can find a collection of posts from various users. Feel free to contribute!
+                <span> 
+                    <span> 
+                        <button class="create-post-btn">
+                            <img src="/static/img/addition.svg" alt="Addition icon" class="addition-icon">
+                            Create Post
+                        </button>
+                    </span>
+                </span>
+            </p>
+
+            <!-- hidden -->
+            <form id="create-post-form" style="display: none; margin-top: 20px;">
+                <textarea name="post-content" placeholder="What's on your mind?" id="post-content"></textarea>
+                
+                <div class="category-selection">
+                  <label><input type="checkbox" name="category" value="Random" checked> Random</label>
+                  <label><input type="checkbox" name="category" value="Technology"> Technology</label>
+                  <label><input type="checkbox" name="category" value="Health"> Health</label>
+                  <label><input type="checkbox" name="category" value="Science"> Science</label>
+                  <label><input type="checkbox" name="category" value="Art"> Art</label>
+                </div>
+                <button type="submit" class="submit-post-btn" id="submit-post-btn">Submit Post</button>
+            </form>
+              
+            
+        </div>
+        
+        <div id="posts">
+        </div>
+    </div>
+    
+    <div id="right-home-div">
+        <div>update</div>
+        <div>update</div>
+        <div>update</div>
+        <div>update</div>
+        <div>update</div>
+    </div>
+</div>
+
+<script src="/js/home.js"></script>
+
+</body>
+</html>

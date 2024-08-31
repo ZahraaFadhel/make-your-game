@@ -1,0 +1,20 @@
+function logOut() {
+  // Send the logout request using fetch
+  fetch('/logout', {
+    method: 'POST',
+  }).then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  }).then(data => {
+
+    if (typeof socket !== 'undefined'){
+      socket.close();
+    }
+
+    showPage('signin');
+  }).catch(error => {
+    console.error('Error:', error);
+  });
+}

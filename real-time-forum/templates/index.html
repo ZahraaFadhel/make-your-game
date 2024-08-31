@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real Time Forum</title>
+  
+  <!-- CSS Links -->
+  <link href="/static/css/style.css" rel="stylesheet" type="text/css">
+  <link href="/static/css/login&signup.css" rel="stylesheet" type="text/css">
+  <link href="/static/css/home.css" rel="stylesheet" type="text/css">
+  <link href="/static/css/categories.css" rel="stylesheet" type="text/css">
+  <link href="/static/css/profile.css" rel="stylesheet" type="text/css">
+  <link href="/static/css/viewPost.css" rel="stylesheet" type="text/css">
+  <link href="/static/css/chat.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+
+  <!-- Sign-Up / Sign-in Page -->
+  <div class="container" id="sign-container">
+    <!-- Sign up -->
+    <div class="form-container sign-up-container">
+      <form class="sign-form" id="signUpForm" method="POST" action="/register">
+        <h1 style="margin-bottom: 10%;">Create Account</h1>
+        <input type="email" placeholder="Email" name="email" pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" title="Please enter a valid email address" required/>
+        <div class="input-group">
+          <input type="text" placeholder="First Name" name="first-name" required/>
+          <input type="text" placeholder="Last Name" name="last-name" required/>
+        </div>
+        <div class="input-group">
+          <input type="number" placeholder="Age" name="age" min="1" required/>
+          <select name="gender">
+            <option value="male">Male</option>
+            <option value="female" selected>Female</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <input type="text" placeholder="Nickname" name="nickname" required/>
+          <input type="password" placeholder="Password" name="password" required/>
+        </div>
+        <button class="sign-up-btn" id="sign-up-btn" type="submit">Sign Up</button>
+      </form>
+    </div>
+
+     <!-- Sign in -->
+    <div class="form-container sign-in-container">
+      <form class="sign-form" id="signInForm">
+        <h1 style="margin-bottom: 10%;">Sign in</h1>
+        <input type="text" placeholder="Email or Nickname" name="signin-input" required/>
+        <input type="password" placeholder="Password" name="signin-password" required/>
+        <button class="sign-in-btn" id="sign-in-btn" type="submit">Sign In</button>
+      </form>
+    </div>
+    <div class="overlay-container">
+      <div class="overlay">
+        <div class="overlay-panel overlay-left">
+          <h1>Welcome Back!</h1>
+          <p>To keep connected with us please login with your personal info</p>
+          <button class="ghost" id="to-sign-in-btn">Sign In</button>
+        </div>
+        <div class="overlay-panel overlay-right">
+          <h1>Hello, Friend!</h1>
+          <p>Enter your personal details and start your journey with us</p>
+          <button class="ghost" id="to-sign-up-btn">Sign Up</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Page -->
+  <div id="main-content-page" class="hidden">
+    <nav id="navbar">
+      <button class="nav-button" id="homeTab">Home</button>
+      <button class="nav-button" id="categoriesTab">Categories</button>
+      <button class="nav-button" id="postTab">Post</button>
+      <button class="nav-button" id="chatTab">Chat</button>
+      <button class="nav-button" id="profileTab">Profile</button>
+      <button class="nav-button" id="logOutTab" onclick="logOut()">Log out</button>
+      <img src="/static/img/ring.svg" alt="Ring Picture" class="ring-pic-top">
+      <img src="/static/img/pfp.png" alt="Profile Picture" class="profile-pic-top">
+    </nav>
+
+    <div id="main-content">
+      <!-- Content will be loaded here -->
+    </div>
+  </div>
+
+  <script src="/js/index.js" type="module"></script>
+  <script src="/js/handlePostsMsgs.js"></script>
+  <script src="/js/logout.js"></script>
+</body>
+</html>

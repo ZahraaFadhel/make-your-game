@@ -1,0 +1,231 @@
+<div id="profile-flex">
+    <div id="right-profile">
+        <!-- bg -->
+        <div class="profile-banner">
+            <img src="/static/img/bg-2.jpeg" width="100%">
+        </div>
+        
+        <div id="user-info">
+            <div id="profile-info">
+                <div class="profile-pic">
+                    <img src="/static/img/pfp.png" alt="pfp" id="profile-pic">
+                </div>    
+                
+                <div class="profile-details">
+                  <h2><b>{{.Username}}</b></h2>
+                  <p>{{z.fadhel2004@gmail.com}}</p>
+                  <div class="member">
+                      <h6>Member since:</h6>
+                      <p>{{January 2, 2006}}</p>
+                  </div>
+               </div>
+              
+                    
+                    <div class="stats">
+                        <div class="stat-column">
+                            <h4>Posts Created</h4>
+                        </div>
+                        <div class="stat-column">
+                            <h4>Comments Created</h4>
+                        </div>
+                        <div class="stat-column">
+                            <h4>Posts Liked</h4>
+                        </div>
+                        <div class="stat-column">
+                          <h4>Posts Disliked</h4>
+                        </div>
+                        <div class="stat-column-logout">
+                          <button class="logout-btn" onclick="logOut()">Logout</button>
+                        </div>
+
+                        <!-- <label for="input-file" class="outline-pink-btn">update image</label>
+                        <input type="file" accept="image/*" id="input-file"> -->
+
+                        
+                        
+                    </div>
+                
+            </div>
+        </div>
+
+        <div id="user-history" class="container-profile">
+            <div class="tabs">
+                <div class="tab active" data-target="posts">Posts</div>
+                <div class="tab" data-target="comments">Comments</div>
+                <div class="tab" data-target="liked-posts">Liked Posts</div>
+                <div class="tab" data-target="disliked-posts">Disiked Posts</div>
+            </div>
+            
+            <div class="content">
+                <div class="posts active">
+                    <!-- Your posts content here -->
+                    <!-- {{if .Posts}}
+                    {{range .Posts}} -->
+                    <a href="/view_post/{{.PostID}}">
+                    <div class="post-structure">
+                          <div class="username">
+                            <h5>{{.Username}}</h5>
+                            <p>posted on ({{.PostDate}})</p>
+                          </div>
+                      
+                          <!-- {{if .PostImgSrc}} -->
+                          <!-- <div id="post-img-div">
+                              <img src="/static/img/tea.jpeg" alt="post-img" id="post-img">
+                          </div> -->
+                          <!-- {{end}} -->
+
+                          <div class="post-text">
+                            {{.PostText}}
+                          </div>
+                        <div class="post-options">
+                          <b>
+                            Likes <span id="like-count-{{.PostID}}">   {{.LikeCount}}</span>
+                          </b>
+
+                          <b>
+                            Dislikes <span id="dislike-count-{{.PostID}}">{{.DislikeCount}}</span>
+                          </b>
+                        </div>
+                    </div>
+                    </a>
+                    <!-- {{end}}
+                  {{else}} -->
+                    <!-- <p>No posts found.</p>
+                  {{end}} -->
+                </div>
+            
+                <div class="comments">
+                        {{range .Comments}}
+                        <a href="/view_post/{{.PostID}}"></a>
+                        <div class="post-structure">
+                              <div class="username">
+                                <h5>{{.Username}}</h5>
+                                <p>posted on ({{.CommentDate}})</p>
+                              </div>
+
+                              <div class="post-text">
+                                {{.CommentText}}
+                              </div>
+                            
+                            <div class="post-options">
+                              <b>
+                                Likes <span id="like-count-{{.PostID}}"> {{.LikeCount}}</span>
+                              </b>
+                              <b>
+                                Dislikes <span id="dislike-count-{{.PostID}}">{{.DislikeCount}}</span>
+                              </b>
+                            </div>
+                        </div>
+                    </a>
+                        {{else}}
+                        <p>No comments yet.</p>
+                        {{end}}
+                </div>
+            
+                <div class="liked-posts">
+                        {{range .LikedPosts}}
+                        <a href="/view_post/{{.PostID}}">
+                            <a href="/view_post/{{.PostID}}">
+                                <div class="post-structure">
+                                      <div class="username">
+                                        <h5>{{.Username}}</h5>
+                                        <p>posted on ({{.PostDate}})</p>
+                                      </div>
+
+                                      <!-- {{if .PostImgSrc}}
+                                      <div id="post-img-div">
+                                          <img src="" alt="post-img" id="post-img">
+                                      </div>
+                                      {{end}} -->
+
+                                      <div class="post-text">
+                                        {{.PostText}}
+                                      </div>
+                                    <div class="post-options">
+                                      <b>
+                                        Likes <span id="like-count-{{.PostID}}">   {{.LikeCount}}</span>
+                                      </b>
+        
+                                      <b>
+                                        Dislikes <span id="dislike-count-{{.PostID}}">{{.DislikeCount}}</span>
+                                      </b>
+                                    </div>
+                                </div>
+                                </a>
+                        </a>
+                        {{else}}
+                        <p>No liked posts yet.</p> 
+                        {{end}}
+                </div>
+                <div class="disliked-posts">
+                  {{range .DislikedPosts}}
+                  <a href="/view_post/{{.PostID}}">
+                      <a href="/view_post/{{.PostID}}">
+                          <div class="post-structure">
+                                <div class="username">
+                                  <h5>{{.Username}}</h5>
+                                  <p>posted on ({{.PostDate}})</p>
+                                </div>
+
+                                <!-- {{if .PostImgSrc}}
+                                <div id="post-img-div">
+                                    <img src="data:image/png;base64,{{.PostImgSrc}}" alt="post-img" id="post-img">
+                                </div>
+                                {{end}} -->
+
+                                <div class="post-text">
+                                  {{.PostText}}
+                                </div>
+                              <div class="post-options">
+                                <b>
+                                  Likes <span id="like-count-{{.PostID}}"> {{.LikeCount}}</span>
+                                </b>
+  
+                                <b>
+                                  Dislikes <span id="dislike-count-{{.PostID}}">{{.DislikeCount}}</span>
+                                </b>
+                              </div>
+                          </div>
+                          </a>
+                  </a>
+                  {{else}}
+                  <p>No disliked posts yet.</p> 
+                  {{end}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+  //  function logOut() {
+  //     console.log("logging out");
+  //     document.getElementById('main-content-page').classList.add('hidden');
+  //     document.querySelector('.container').classList.remove('hidden');
+  //     console.log("logging out");
+  //   }
+
+    const tabs = document.querySelectorAll('.tab');
+    const contentSections = document.querySelectorAll('.posts, .comments, .liked-posts, .disliked-posts');
+    
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Remove active class from all tabs
+        tabs.forEach(t => t.classList.remove('active'));
+    
+        // Add active class to the clicked tab
+        tab.classList.add('active');
+    
+        // Get the target content section
+        const target = tab.dataset.target;
+    
+        // Remove active class from all content sections
+        contentSections.forEach(section => section.classList.remove('active'));
+    
+        // Add active class to the target content section
+        document.querySelector(`.${target}`).classList.add('active');
+      });
+    });
+    
+</script>
+<script src="/js/updateProfile.js"></script>

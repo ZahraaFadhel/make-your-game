@@ -1,0 +1,85 @@
+<div id="flex-vp">
+    
+<div id="middle-posts">
+    
+    <div id="posts">
+        <div class="post-structure-vp view-post-struct">
+
+            <div class="username">
+                <h5>{{.Username}}</h5>
+                <p>posted on ({{.PostDate}})</p>
+            </div>
+            <div class="post-category">
+                <!-- {{range .Categories}}
+                {{.}}
+                {{end}} -->
+                categories
+            </div>
+
+
+            <div class="post-text">
+                <pre>{{.Post.PostText}}</pre>
+            </div>
+            <div class="post-options">
+                <form method="POST" class="like-form">
+                    <button type="submit" class="like-button" data-post-id="{{.Post.PostID}}" data-is-liked="{{.PostLikedOrNot.IsLiked}}">
+                        <div id="like-heart-{{.Post.PostID}}" class="heartLike"></div>
+                    </button>
+                </form>
+                <b>
+                    Likes <span id="like-count-{{.Post.PostID}}">{{.Post.LikeCount}}</span>
+                </b>
+                <form method="POST" class="dislike-form">
+                    <button type="submit" class="dislike-button" data-post-id="{{.Post.PostID}}" data-is-disliked="{{.PostLikedOrNot.IsDisliked}}">
+                        <div id="dislike-heart-{{.Post.PostID}}" class="heartDislike"></div>
+                    </button>
+                </form>
+                <b>
+                    Dislikes <span id="dislike-count-{{.Post.PostID}}">{{.Post.DislikeCount}}</span>
+                </b>
+            </div>
+        </div>
+    </div>
+    <div id="comment-form">
+            <form method="POST" action="/view_post/{{.Post.PostID}}">
+                <textarea name="CommentText" placeholder="Enter your comment" id="CommentText" required></textarea>
+                <button id="reply-button" type="submit">Reply</button>
+            </form>
+    </div>
+    <!-- <div id="comments-list"></div>         -->
+<div id="comments-list">
+    <!-- {{range .Comments}} -->
+    <div class="comment-sec">
+        <div class="line"></div>
+        <div class="comment-box">
+            <h6><b>{{.Username}}</b></h6>
+            <br>
+                <pre>{{.CommentText}}</pre>
+            <br>
+            <br>
+            <div class="comment-option">
+
+                <form method="POST">
+                    <button type="submit" class="clike-button" data-comment-id="{{.CommentID}}" data-is-liked="{{.IsLiked}}">
+                        <div class="heartLike" id="clike-heart-{{.CommentID}}"></div>
+                    </button>
+                </form>
+                
+                <b>Likes <span id="clike-count-{{.CommentID}}">{{.LikeCount}}</span> </b>
+
+                <form method="POST">
+                    <button type="submit" class="cdislike-button" data-comment-id="{{.CommentID}}" data-is-disliked="{{.IsDisliked}}">
+                        <div class="heartDislike" id="cdislike-heart-{{.CommentID}}"></div>
+                    </button>
+                </form>
+
+                <b>Dislikes <span id="cdislike-count-{{.CommentID}}">{{.DislikeCount}}</span></b> 
+                                    
+            </div>
+        </div>
+    </div>
+    <!-- {{end}} -->
+</div>
+</div>
+
+</div>

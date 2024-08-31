@@ -1,0 +1,156 @@
+.chat-body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 87vh;
+}
+
+
+.chat-container {
+  display: flex;
+  width: 80%;
+  height: 80%;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Added shadow effect */
+  background-color: #fff;
+}
+
+.user-list {
+  flex: 1;
+  padding: 20px;
+  border-right: 1px solid #ccc;
+  /* background: #DAC0A3; */
+  overflow-y: auto;
+}
+
+.user-list-item {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.user-list-item:hover {
+  background-color: #f1f1f1;
+}
+
+.user-list-item img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.user-image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.online-indicator {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  bottom: 5px;
+  right: 7px;
+}
+
+.unread-noti {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  background-color: #102C57;
+  border-radius: 50%;
+  right: 10px;
+}
+.chat-messages {
+  flex: 2;
+  position: relative;
+  overflow-y: auto;
+  display: flex; 
+  flex-direction: column; 
+}
+
+.message-container {
+  padding: 10px;
+  row-gap: 5px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+
+
+.message-container-u {
+  margin-bottom: 10px;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-content: flex-end;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  background-color: #102C57;
+  border-radius: 5px;
+  padding: 10px;
+  max-width: 70%;
+  color: white;
+}
+
+.message.user {
+  background-color: #F1F1F8;
+  color: black;
+}
+
+.message-content {
+  font-size: 14px;
+}
+
+.message-timestamp {
+  font-size: 12px;
+  color: #777;
+  margin-top: 5px;
+  position: relative;
+  display: block;
+}
+
+.input-box {
+  position: absolute;
+  bottom: 0;
+  /* background-color: #f1f1f1; */
+  width: 100%;
+  display: flex;
+  padding: 7px;
+}
+
+.input-box input {
+  flex: 1;
+  padding: 8px;
+  margin: 5px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+}
+
+.input-box button {
+  height: 35px;
+  width: 35px;
+  margin: 5px;
+  background-color: #102C57;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 14px;
+
+}
