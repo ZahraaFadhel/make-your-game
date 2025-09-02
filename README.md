@@ -1,39 +1,27 @@
-TO DO :
+# Pacman Game
 
-- FIX: -> when scared ghost walked through pacman, pacman disappers ✓
-- Ghosts move through power ; why they skip it? ✓
-- 1 when restart ✓
-- LAYERS ✓
-- FIX: -> when pacman is eaten in his start position ✓
-- stop / continue ✓
-- change scared-ghost img ✓
-- restart ✓
+A classic **Pacman** game implemented in [js], featuring a fun, interactive gameplay experience with ghosts, power-ups, and a scoring system.
 
+---
 
+## Features
 
+- Classic Pacman gameplay with mazes and pellets  
+- Ghosts with basic chasing behavior  
+- Power-ups that allow Pacman to eat ghosts temporarily  
+- Score tracking and lives system  
+- Keyboard controls for player movement  
+- Optional sound effects and animations  
 
+---
 
+## Demo
 
+[Optional: Include a GIF or link to a live demo here]  
 
+---
 
+## Installation
 
-
-
-
-- move from right to left ✓
-- Total dots (check for win) ✓
-- FIX: ghosts on dots ✓
-- requestAnimationFrame() ✓
-- rotate pacman when moving ✓
-- favicon ✓
-- 3 lives before game over ✓
-- Timer ✓
-
-- random walls, dots, powers and ghosts
-- speed of pacman
-
-TO SEE FPS/LAYERS
-```
-CTRL + SHIFT + P 
-```
+1. **Clone the repository:**  
 
